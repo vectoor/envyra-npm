@@ -26,7 +26,9 @@ export interface EnvIssue {
 
 /** Base class for every error thrown by envyra. */
 export class EnvyraError extends Error {
-  constructor(message: string, options?: ErrorOptions) {
+  // `{ cause }` instead of the global `ErrorOptions` so the emitted types do
+  // not require consumers to have ES2022 libs configured.
+  constructor(message: string, options?: { cause?: unknown }) {
     super(message, options);
     this.name = "EnvyraError";
   }
