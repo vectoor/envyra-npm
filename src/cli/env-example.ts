@@ -25,7 +25,9 @@ function formatDefault(value: unknown): string {
  * Security rules:
  * - only schema defaults and `example` values are written, never current
  *   runtime values
- * - variables marked `secret: true` are always written empty
+ * - variables marked `secret: true` never write their default; an explicit
+ *   `example` is still written, because it is author-provided documentation
+ *   text, not a real value
  */
 export function renderEnvExample(schema: EnvSchema): string {
   const lines: string[] = [...HEADER, ""];
@@ -43,12 +45,10 @@ export function renderEnvExample(schema: EnvSchema): string {
 
     const secret = spec.secret === true;
     let value = "";
-    if (!secret) {
-      if (spec.example !== undefined) {
-        value = spec.example;
-      } else if (spec.default !== undefined) {
-        value = formatDefault(spec.default);
-      }
+    if (spec.example !== undefined) {
+      value = spec.example;
+    } else if (!secret && spec.default !== undefined) {
+      value = formatDefault(spec.default);
     }
     lines.push(`${key}=${value}`);
     lines.push("");

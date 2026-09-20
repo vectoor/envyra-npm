@@ -304,8 +304,9 @@ R2_ENDPOINT: {
 R2_ENDPOINT=https://<accountid>.r2.cloudflarestorage.com
 ```
 
-`example` is never applied at runtime and never written for `secret: true`
-variables.
+`example` is never applied at runtime. It is written even for `secret: true`
+variables — it is documentation you wrote, not a real value — while a
+secret's `default` is still never emitted.
 
 ## Docker and production
 

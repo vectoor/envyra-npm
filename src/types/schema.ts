@@ -30,8 +30,9 @@ interface BaseSpec {
   /**
    * An example value written to `.env.example` by `envyra sync`, purely as
    * documentation. Unlike `default`, it is never applied at runtime — a
-   * required variable with an `example` is still required. Never emitted for
-   * `secret: true` variables.
+   * required variable with an `example` is still required. Written even for
+   * `secret: true` variables, because it is author-provided documentation,
+   * not a real value; secret defaults are still never emitted.
    */
   example?: string;
 }

@@ -223,7 +223,8 @@ export default defineConfig({
     writeConfig(`import { defineConfig } from "envyra";
 export default defineConfig({
   R2_ENDPOINT: { type: "url", example: "https://<accountid>.r2.cloudflarestorage.com" },
-  API_KEY: { secret: true, example: "must-not-leak" },
+  API_KEY: { secret: true, example: "replace-with-your-api-key" },
+  API_TOKEN: { secret: true, default: "schema-default-that-must-not-leak" },
   PORT: { type: "number", default: 3000 },
 });
 `);
@@ -231,9 +232,11 @@ export default defineConfig({
 
     const example = fs.readFileSync(path.join(cwd, ".env.example"), "utf8");
     expect(example).toContain("R2_ENDPOINT=https://<accountid>.r2.cloudflarestorage.com");
-    // secret + example stays empty
-    expect(example).toContain("API_KEY=\n");
-    expect(example).not.toContain("must-not-leak");
+    // example is author-provided documentation, written even for secrets
+    expect(example).toContain("API_KEY=replace-with-your-api-key");
+    // but a secret's default is still never written
+    expect(example).toContain("API_TOKEN=\n");
+    expect(example).not.toContain("schema-default-that-must-not-leak");
     // plain defaults still work
     expect(example).toContain("PORT=3000");
   });
