@@ -27,6 +27,13 @@ interface BaseSpec {
    * by `envyra sync`.
    */
   description?: string;
+  /**
+   * An example value written to `.env.example` by `envyra sync`, purely as
+   * documentation. Unlike `default`, it is never applied at runtime — a
+   * required variable with an `example` is still required. Never emitted for
+   * `secret: true` variables.
+   */
+  example?: string;
 }
 
 export interface StringSpec extends BaseSpec {

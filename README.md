@@ -290,6 +290,23 @@ REDIS_URL=
 NODE_ENV=development
 ```
 
+Use `example` for a value that belongs in `.env.example` as documentation but
+must **not** act as a runtime default — the variable stays required:
+
+```ts
+R2_ENDPOINT: {
+  type: "url",
+  example: "https://<accountid>.r2.cloudflarestorage.com",
+},
+```
+
+```env
+R2_ENDPOINT=https://<accountid>.r2.cloudflarestorage.com
+```
+
+`example` is never applied at runtime and never written for `secret: true`
+variables.
+
 ## Docker and production
 
 `envyra` validates `process.env`, so production needs nothing special:

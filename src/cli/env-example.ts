@@ -23,7 +23,8 @@ function formatDefault(value: unknown): string {
  * produces no diff.
  *
  * Security rules:
- * - only schema defaults are written, never current runtime values
+ * - only schema defaults and `example` values are written, never current
+ *   runtime values
  * - variables marked `secret: true` are always written empty
  */
 export function renderEnvExample(schema: EnvSchema): string {
@@ -36,12 +37,19 @@ export function renderEnvExample(schema: EnvSchema): string {
     if (spec.type === "enum") {
       lines.push(`# Allowed values: ${spec.values.map((v) => JSON.stringify(v)).join(", ")}`);
     }
-    if (spec.required === false && spec.default === undefined) {
+    if (spec.required === false && spec.default === undefined && spec.example === undefined) {
       lines.push("# Optional.");
     }
 
     const secret = spec.secret === true;
-    const value = !secret && spec.default !== undefined ? formatDefault(spec.default) : "";
+    let value = "";
+    if (!secret) {
+      if (spec.example !== undefined) {
+        value = spec.example;
+      } else if (spec.default !== undefined) {
+        value = formatDefault(spec.default);
+      }
+    }
     lines.push(`${key}=${value}`);
     lines.push("");
   }

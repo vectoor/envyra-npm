@@ -46,6 +46,10 @@ export function assertValidSchema(schema: unknown): asserts schema is EnvSchema 
       }
     }
 
+    if (s.example !== undefined && typeof s.example !== "string") {
+      problems.push(`${key}: example must be a string.`);
+    }
+
     if (s.type === "number" && s.default !== undefined && typeof s.default !== "number") {
       problems.push(`${key}: number default must be a number.`);
     }

@@ -341,6 +341,23 @@ describe("createEnv — exitOnError", () => {
   });
 });
 
+describe("createEnv — example", () => {
+  it("never applies example as a runtime default", () => {
+    const error = catchValidation(() =>
+      createEnv({ R2_ENDPOINT: { type: "url", example: "https://example.com" } }, { source: {} }),
+    );
+    expect(error.issues[0]).toMatchObject({ key: "R2_ENDPOINT", code: "missing" });
+  });
+
+  it("still validates the real value when example is set", () => {
+    const env = createEnv(
+      { R2_ENDPOINT: { type: "url", example: "https://example.com" } },
+      { source: { R2_ENDPOINT: "https://real.r2.dev" } },
+    );
+    expect(env.R2_ENDPOINT).toBe("https://real.r2.dev");
+  });
+});
+
 function catchValidation(fn: () => unknown): EnvValidationError {
   try {
     fn();
