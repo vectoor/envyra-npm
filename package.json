@@ -1,6 +1,6 @@
 {
   "name": "envyra",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Define your environment once. Validate it at startup. Use it type-safely everywhere.",
   "keywords": [
     "environment",
