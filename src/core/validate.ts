@@ -1,14 +1,26 @@
 import type { EnvSchema, EnvSpecType } from "../types/schema.js";
 import { parseValue } from "../validators/index.js";
+import { loadEnvFile } from "./env-file.js";
 import { type EnvIssue, EnvValidationError } from "./errors.js";
+
+/**
+ * Where values are read from.
+ *
+ * - omitted: `process.env`
+ * - `"file"`: the `.env` file in the current working directory, with real
+ *   environment variables taking precedence (dotenv convention). No path
+ *   option on purpose — `.env` in cwd is the whole convention.
+ * - an object: used as-is, which keeps validation trivially testable.
+ */
+export type EnvSource = "file" | Record<string, string | undefined>;
 
 export interface ValidateEnvOptions {
   /**
-   * Where values are read from.
+   * Where values are read from. See {@link EnvSource}.
    *
    * @default process.env
    */
-  source?: Record<string, string | undefined>;
+  source?: EnvSource;
   /**
    * Trim surrounding whitespace from raw values before parsing.
    *
@@ -21,6 +33,15 @@ export interface ValidateEnvOptions {
    * @default true
    */
   emptyStringAsMissing?: boolean;
+}
+
+function resolveSource(source: EnvSource | undefined): Record<string, string | undefined> {
+  if (source === "file") {
+    // Real environment variables win over file values, so deployments that
+    // inject env vars directly keep working when a .env file is present.
+    return { ...loadEnvFile(process.cwd()), ...process.env };
+  }
+  return source ?? process.env;
 }
 
 /**
@@ -52,7 +73,7 @@ export function validateEnv(
   schema: EnvSchema,
   options: ValidateEnvOptions = {},
 ): Record<string, unknown> {
-  const source = options.source ?? process.env;
+  const source = resolveSource(options.source);
   const trim = options.trim ?? true;
   const emptyStringAsMissing = options.emptyStringAsMissing ?? true;
 

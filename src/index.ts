@@ -7,6 +7,7 @@ export {
   EnvyraError,
 } from "./core/errors.js";
 export { defineConfig } from "./define-config.js";
+export type { EnvSource, ValidateEnvOptions } from "./core/validate.js";
 export type { InferEnv, InferValue } from "./types/infer.js";
 export type {
   BooleanSpec,

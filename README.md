@@ -8,10 +8,7 @@ turns `process.env` into a validated, fully typed configuration object.
 - **Type-safe by default** — full inference from the schema, no duplicate interfaces.
 - **Fail early, fail loud** — invalid configuration crashes at startup with every problem listed.
 - **Secure by default** — secrets never appear in error output or `.env.example`.
-- **Source-agnostic** — works with `.env` files, Docker, Kubernetes, CI/CD, and any hosting platform, because the runtime source of truth is `process.env`.
-
-> **Name note:** if the npm name `envyra` is taken at publish time, rename the
-> `name` field in `package.json` (and the imports below) before publishing.
+- **Source-agnostic** — works with Docker, Kubernetes, CI/CD, and any hosting platform, because the default runtime source of truth is `process.env`; `.env` files are one flag away.
 > Everything else is name-agnostic.
 
 ## Installation
@@ -195,10 +192,21 @@ This makes tests trivial — no `process.env` stubbing required.
 
 ## `.env` files
 
-`envyra` deliberately does **not** load `.env` files. Populate `process.env`
-however you like — Node's `--env-file`, dotenv, Docker, Kubernetes, your
-hosting platform — and `envyra` validates the result. In production you
-usually don't need a `.env` file at all.
+By default `envyra` reads `process.env`, so it works with Docker, Kubernetes,
+CI/CD, and any hosting platform without doing anything. For local development
+you can opt into the built-in `.env` loader with a single flag:
+
+```ts
+const env = createEnv(schema, { source: "file" });
+```
+
+`source: "file"` reads the `.env` file in the current working directory — no
+path option, the file name is the convention. Real environment variables take
+precedence over file values (the dotenv convention), so deployments keep
+working when a `.env` file happens to be present. A missing `.env` file is an
+explicit error, never a silent pass. The parser is dependency-free and
+supports `KEY=VALUE`, `export` prefixes, comments, and quoted values; variable
+expansion and multiline values are intentionally not supported.
 
 ## CLI
 
