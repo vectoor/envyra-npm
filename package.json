@@ -1,6 +1,6 @@
 {
   "name": "envyra",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Define your environment once. Validate it at startup. Use it type-safely everywhere.",
   "keywords": [
     "environment",
@@ -18,7 +18,7 @@
   "author": "vector <vectormsk90@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vectoor/envyra.git"
+    "url": "git+https://github.com/vectoor/envyra-npm.git"
   },
   "type": "module",
   "engines": {
