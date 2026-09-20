@@ -15,10 +15,10 @@
     "dotenv"
   ],
   "license": "MIT",
-  "author": "Your Name <you@example.com>",
+  "author": "vector <vectormsk90@gmail.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/your-username/envyra.git"
+    "url": "git+https://github.com/vectoor/envyra.git"
   },
   "type": "module",
   "engines": {
